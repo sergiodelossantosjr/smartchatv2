@@ -60,7 +60,7 @@ public class Main2Activity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
 
-        //this is a comments
+        //this is a comment and it is good!
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
