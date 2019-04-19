@@ -3,6 +3,9 @@ package spcba.com.smartchatv2;
 import android.content.DialogInterface;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
@@ -16,7 +19,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -51,6 +56,10 @@ public class Main2Activity extends AppCompatActivity
     private Thread t;
     private String to, from, sessionNo,AGENT_ID, choosenLanguage, agentColor, customerName;
     private CharSequence languages[] = new CharSequence[]{"English", "Spanish", "Japanese", "German", "Chinese", "Korean"};
+    private LinearLayout message_input;
+    private LinearLayout content_frame3;
+    private RelativeLayout my_message;
+    private RelativeLayout their_message;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +79,10 @@ public class Main2Activity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        message_input = (LinearLayout) findViewById(R.id.message_input);
+        content_frame3 = (LinearLayout) findViewById(R.id.content_frame3);
+        my_message = (RelativeLayout) findViewById(R.id.my_message);
+        their_message = (RelativeLayout) findViewById(R.id.their_message);
 
         //custom
         customerName = getIntent().getStringExtra("username");
@@ -350,10 +363,24 @@ public class Main2Activity extends AppCompatActivity
         if (id == R.id.nav_camera) {
             // Handle the camera action
         } else if (id == R.id.nav_gallery) {
+            content_frame3.setVisibility(View.INVISIBLE);
+            message_input.setVisibility(View.VISIBLE);
+            my_message.setVisibility(View.VISIBLE);
             showLanguageDialog();
         } else if (id == R.id.nav_slideshow) {
 
-        } else if (id == R.id.nav_share) {
+        } else if (id == R.id.nav_history){
+            content_frame3.setVisibility(View.VISIBLE);
+            message_input.setVisibility(View.INVISIBLE);
+            my_message.setVisibility(View.INVISIBLE);
+
+            Fragment fragment = new SessionHistoryFragment();
+            FragmentManager fm = this.getSupportFragmentManager();
+            FragmentTransaction ft = fm.beginTransaction();
+            ft.replace(R.id.content_frame3, fragment);
+            ft.commit();
+
+        }else if (id == R.id.nav_share) {
              //logout
              super.onBackPressed();
         }

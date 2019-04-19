@@ -5,6 +5,7 @@
     android:paddingVertical="10dp"
     android:paddingRight="15dp"
     android:paddingLeft="60dp"
+    android:id="@+id/my_message"
     android:clipToPadding="false">
 
     <TextView
