@@ -1,29 +1,39 @@
 package spcba.com.smartchatv2;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
+import android.view.*;
+import android.widget.ListView;
+
 
 public class SessionHistoryFragment extends Fragment {
 
-    View view;
+    private View view;
+    private static final String TAG = SessionHistoryFragment.class.getSimpleName();
+    private ProgressDialog pDialog;
+
+    private String username;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // TODO Auto-generated method stub
+        view = inflater.inflate(R.layout.content_main3, container, false);
+        // Progress dialog
+        pDialog = new ProgressDialog(getActivity());
+        pDialog.setCancelable(false);
+        view.setVisibility(View.VISIBLE);
+        if(this.getArguments() != null){
+            username  = this.getArguments().getString("username");
+            GetHistory(username);
+        }
 
-        view = inflater.inflate(R.layout.session_historyfragment, container, false);
         return view;
     }
 
-    public void setName(String name)
-    {
-        TextView txtName = (TextView) view.findViewById(R.id.textView);
-        txtName.setText("Hi " + name);
+    private void GetHistory(String username) {
+        SessionHistoryDataAccess.GetHistory(SessionHistoryFragment.this, view, username);
     }
-
 }

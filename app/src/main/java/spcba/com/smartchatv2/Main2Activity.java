@@ -58,8 +58,6 @@ public class Main2Activity extends AppCompatActivity
     private CharSequence languages[] = new CharSequence[]{"English", "Spanish", "Japanese", "German", "Chinese", "Korean"};
     private LinearLayout message_input;
     private LinearLayout content_frame3;
-    private RelativeLayout my_message;
-    private RelativeLayout their_message;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,8 +79,6 @@ public class Main2Activity extends AppCompatActivity
 
         message_input = (LinearLayout) findViewById(R.id.message_input);
         content_frame3 = (LinearLayout) findViewById(R.id.content_frame3);
-        my_message = (RelativeLayout) findViewById(R.id.my_message);
-        their_message = (RelativeLayout) findViewById(R.id.their_message);
 
         //custom
         customerName = getIntent().getStringExtra("username");
@@ -277,6 +273,7 @@ public class Main2Activity extends AppCompatActivity
                 jsonParams.put("transaction", "chat");
                 jsonParams.put("from", choosenLanguage);
                 jsonParams.put("to", "en");
+                jsonParams.put("createdby", customerName);
 
                 // prepare the Request
                 JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.POST,
@@ -365,16 +362,19 @@ public class Main2Activity extends AppCompatActivity
         } else if (id == R.id.nav_gallery) {
             content_frame3.setVisibility(View.INVISIBLE);
             message_input.setVisibility(View.VISIBLE);
-            my_message.setVisibility(View.VISIBLE);
+            messagesView.setVisibility(View.VISIBLE);
             showLanguageDialog();
         } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_history){
             content_frame3.setVisibility(View.VISIBLE);
             message_input.setVisibility(View.INVISIBLE);
-            my_message.setVisibility(View.INVISIBLE);
+            messagesView.setVisibility(View.INVISIBLE);
+            Bundle bundle = new Bundle();
+            bundle.putString("username", customerName);
 
-            Fragment fragment = new SessionHistoryFragment();
+            SessionHistoryFragment fragment = new SessionHistoryFragment();
+            fragment.setArguments(bundle);
             FragmentManager fm = this.getSupportFragmentManager();
             FragmentTransaction ft = fm.beginTransaction();
             ft.replace(R.id.content_frame3, fragment);
