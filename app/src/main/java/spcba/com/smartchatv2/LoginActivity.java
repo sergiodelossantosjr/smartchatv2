@@ -105,8 +105,9 @@ public class LoginActivity extends AppCompatActivity {
                             // user successfully logged in
                             String _password = jObj.getString("Password");
                             String firstname = jObj.getString("FirstName");
+                            String _role = jObj.getString("Role");
 
-                            if(_password.equalsIgnoreCase(password)){
+                            if(_password.equalsIgnoreCase(password) && _role.equalsIgnoreCase("user")){
                                 // login user check to database
                                 // Create login session
                                 Intent intent = new Intent(LoginActivity.this, Main2Activity.class);
