@@ -59,6 +59,7 @@ public class Main2Activity extends AppCompatActivity
     private CharSequence languages[] = new CharSequence[]{"English", "Spanish", "Japanese", "German", "Chinese", "Korean"};
     private LinearLayout message_input;
     private LinearLayout content_frame3;
+    private boolean hasChosenLanguageAlready = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -342,6 +343,7 @@ public class Main2Activity extends AppCompatActivity
                         socket.off(customerName);
 
                         //call session delete
+                        hasChosenLanguageAlready = true;
                         deleteSession();
                         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
                         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -453,10 +455,38 @@ public class Main2Activity extends AppCompatActivity
                         break;
                     default:
                 }
-                sendRequest();
-                Toast.makeText(getApplicationContext(), "You choose  " + languages[which].toString() + " as language.", Toast.LENGTH_LONG).show();
+                if(!hasChosenLanguageAlready){
+                    hasChosenLanguageAlready = true;
+                    sendRequest();
+                    Toast.makeText(getApplicationContext(), "You choose  " + languages[which].toString() + " as language.", Toast.LENGTH_LONG).show();
+                }else{
+                    messageDialog();
+                }
             }
         });
         builder.show();
     }
+
+    private void messageDialog(){
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                Main2Activity.this, R.style.MyDialogTheme);
+
+        // set title
+        alertDialogBuilder.setTitle("Message");
+
+        // set dialog message
+        alertDialogBuilder
+                .setMessage("Logout first before you create another session.")
+                .setCancelable(false)
+                .setPositiveButton("Ok",new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog,int id) {
+                        // if this button is clicked, close
+                    }
+                });
+        // create alert dialog
+        AlertDialog alertDialog = alertDialogBuilder.create();
+
+        // show it
+        alertDialog.show();
+    }//end
 }
