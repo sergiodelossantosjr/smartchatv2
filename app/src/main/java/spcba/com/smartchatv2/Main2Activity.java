@@ -22,6 +22,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -87,6 +88,16 @@ public class Main2Activity extends AppCompatActivity
         messagesView = (ListView) findViewById(R.id.messages_view);
         imgSent = (ImageButton) findViewById(R.id.sent);
         messagesView.setAdapter(messageAdapter);
+
+        Bundle extras = getIntent().getExtras();
+        String firstname = extras.getString("firstname");
+
+
+        View hView = navigationView.getHeaderView(0);
+        TextView nav_user = (TextView) hView.findViewById(R.id.txtFirstName);
+        TextView nav_email = (TextView) hView.findViewById(R.id.txtEmail);
+        nav_user.setText(firstname);
+        nav_email.setText(customerName);
 
         imgSent.setEnabled(false);
         agentColor = getRandomColor();
@@ -321,12 +332,36 @@ public class Main2Activity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which){
+                    case DialogInterface.BUTTON_POSITIVE:
+                        //Yes button clicked
+                        socket.disconnect();
+                        socket.off(customerName);
+
+                        //call session delete
+                        deleteSession();
+                        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                        if (drawer.isDrawerOpen(GravityCompat.START)) {
+                            drawer.closeDrawer(GravityCompat.START);
+                        } else {
+                            Main2Activity.super.onBackPressed();
+                        }
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        //No button clicked
+                        break;
+                }
+            }
+        };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(Main2Activity.this, R.style.MyDialogTheme);
+        builder.setMessage("Do you want to exit application?").setPositiveButton("Yes", dialogClickListener)
+                .setNegativeButton("No", dialogClickListener).show();
+
     }
 
     @Override
